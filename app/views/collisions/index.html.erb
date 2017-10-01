@@ -1,0 +1,181 @@
+<input id="origin-input" class="controls" type="text"
+        placeholder="Enter an origin location">
+
+    <input id="destination-input" class="controls" type="text"
+        placeholder="Enter a destination location">
+
+    <div id="mode-selector" class="controls">
+      <input type="radio" name="type" id="changemode-walking" checked="checked">
+      <label for="changemode-walking">Walking</label>
+
+      <input type="radio" name="type" id="changemode-bicycling">
+      <label for="changemode-transit">Bicycling</label>
+
+      <!-- <input type="radio" name="type" id="changemode-transit">
+      <label for="changemode-transit">Transit</label>
+
+      <input type="radio" name="type" id="changemode-driving">
+      <label for="changemode-driving">Driving</label> -->
+    </div>
+
+    <div id="map"></div>
+
+    <script>
+      // This example requires the Places library. Include the libraries=places
+      // parameter when you first load the API. For example:
+      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          mapTypeControl: false,
+          center: {lat: 40.7549, lng: -73.9840},
+          zoom: 13
+        });
+
+        new AutocompleteDirectionsHandler(map);
+
+        // map.data.loadGeoJson("https://data.cityofnewyork.us/resource/qiz3-axqb.geojson?$where=number_of_pedestrians_injured > 0&date=2017-09-04T00:00:00.000&borough=MANHATTAN");
+
+      }
+
+       /**
+        * @constructor
+       */
+      function AutocompleteDirectionsHandler(map) {
+        this.map = map;
+        this.originPlaceId = null;
+        this.destinationPlaceId = null;
+        this.travelMode = 'WALKING';
+        var originInput = document.getElementById('origin-input');
+        var destinationInput = document.getElementById('destination-input');
+        var modeSelector = document.getElementById('mode-selector');
+        this.directionsService = new google.maps.DirectionsService;
+        this.directionsDisplay = new google.maps.DirectionsRenderer({
+          draggable: true,
+        });
+        this.directionsDisplay.setMap(map);
+
+        var originAutocomplete = new google.maps.places.Autocomplete(
+            originInput, {placeIdOnly: true});
+        var destinationAutocomplete = new google.maps.places.Autocomplete(
+            destinationInput, {placeIdOnly: true});
+
+        this.setupClickListener('changemode-walking', 'WALKING');
+        this.setupClickListener('changemode-bicycling', 'BICYCLING');
+        // this.setupClickListener('changemode-transit', 'TRANSIT');
+        // this.setupClickListener('changemode-driving', 'DRIVING');
+
+        this.setupPlaceChangedListener(originAutocomplete, 'ORIG');
+        this.setupPlaceChangedListener(destinationAutocomplete, 'DEST');
+
+        this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(originInput);
+        this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(destinationInput);
+        this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(modeSelector);
+      }
+
+      // Sets a listener on a radio button to change the filter type on Places
+      // Autocomplete.
+      AutocompleteDirectionsHandler.prototype.setupClickListener = function(id, mode) {
+        var radioButton = document.getElementById(id);
+        var me = this;
+        radioButton.addEventListener('click', function() {
+          me.travelMode = mode;
+          me.route();
+        });
+      };
+
+      AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function(autocomplete, mode) {
+        var me = this;
+        autocomplete.bindTo('bounds', this.map);
+        autocomplete.addListener('place_changed', function() {
+          var place = autocomplete.getPlace();
+          if (!place.place_id) {
+            window.alert("Please select an option from the dropdown list.");
+            return;
+          }
+          if (mode === 'ORIG') {
+            me.originPlaceId = place.place_id;
+          } else {
+            me.destinationPlaceId = place.place_id;
+          }
+          me.route();
+        });
+
+      };
+
+
+
+      AutocompleteDirectionsHandler.prototype.route = function() {
+        if (!this.originPlaceId || !this.destinationPlaceId) {
+          return;
+        }
+        var me = this;
+
+        this.directionsService.route({
+          origin: {'placeId': this.originPlaceId},
+          destination: {'placeId': this.destinationPlaceId},
+          travelMode: this.travelMode,
+          provideRouteAlternatives: true,
+        }, function(response, status) {
+          if (status === 'OK') {
+            
+            //   // me.directionsDisplay.setDirections(response);
+            //   me.directionsDisplay.setOptions({directions:response,routeIndex:i});
+            for (var i = 0, len = response.routes.length; i < len; i++) {
+                new google.maps.DirectionsRenderer({
+                    map: this.map,
+                    directions: response,
+                    routeIndex: i
+                });
+                for (var n = 0; n < response.routes["" + i + ""].overview_path.length; n++) {
+                  console.log(response.routes["" + i + ""].overview_path.length);
+                  this.map.data.loadGeoJson("https://data.cityofnewyork.us/resource/qiz3-axqb.geojson?$where=within_circle(location, " + response.routes["" + i + ""].overview_path["" + n + ""].lat() + ", " + response.routes["" + i + ""].overview_path["" + n + ""].lng() + ", 15) AND (number_of_persons_injured > 0 OR number_of_persons_killed > 0)");
+                  // $.get("https://data.cityofnewyork.us/resource/qiz3-axqb.geojson?$where=within_circle(location, " + response.routes["" + i + ""].overview_path["" + n + ""].lat() + ", " + response.routes["" + i + ""].overview_path["" + n + ""].lng() + ", 15) AND (number_of_persons_injured > 0 OR number_of_persons_killed > 0)&$select=count(*)").success(function(response) {
+                  //   console.log("response")
+                  //   console.log(response)
+                  // })
+                  
+                }
+                
+            }
+            console.log(this.map.data);
+          } else {
+            window.alert('Directions request failed due to ' + status);
+          }
+          
+          // console.log(response.routes["0"].overview_path["0"]);
+          // console.log(response.routes);
+          // console.log(response.routes["0"].overview_path["0"].lat());
+          // console.log(response.routes["0"].overview_path["1"].lat());
+          // console.log(response.routes["0"].overview_path["0"].lng());
+          // console.log(response.routes["0"].overview_path["1"].lng());
+          // console.log(response.routes["0"].overview_path.length);
+          // this.map.data.loadGeoJson("https://data.cityofnewyork.us/resource/qiz3-axqb.geojson?$where=within_circle(location, 40.73214, -73.99860000000001, 100)");
+          // for (var i = 0; i < response.routes["0"].overview_path.length; i++) {
+          // this.map.data.loadGeoJson("https://data.cityofnewyork.us/resource/qiz3-axqb.geojson?$where=within_circle(location, " + response.routes["0"].overview_path["" + i + ""].lat() + ", " + response.routes["0"].overview_path["" + i + ""].lng() + ", 15) AND (number_of_persons_injured > 0 OR number_of_persons_killed > 0)");
+          // console.log(this.map.data);
+          // }
+          // https://data.cityofnewyork.us/resource/qiz3-axqb.geojson?$where=within_circle(location,%2040.73214,%20-73.99860000000001,%20100)%20AND%20(number_of_persons_injured%20%3E%200%20OR%20number_of_persons_killed%20%3E%200)
+          this.map.data.setStyle(function(feature) {
+            // var magnitude = feature.getProperty('mag');
+            return {
+              icon: getCircle()
+            };
+          });
+        }.bind(this));
+      };
+
+      function getCircle() {
+        return {
+          path: google.maps.SymbolPath.CIRCLE,
+          fillColor: 'red',
+          fillOpacity: .02,
+          scale: 10,
+          strokeColor: 'black',
+          strokeWeight: .5
+        };
+      }
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA0pWqvh4uJjV18gI3FvnpLz7vtdgWcplQ&libraries=places&callback=initMap"
+        async defer></script>

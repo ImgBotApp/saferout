@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  location: 
+  latitude: 1.5
+  longitute: 1.5
+  street_name: MyString
+  date: 2017-09-10
+  borough: MyString
+  cyclists_injured: 1
+  cyclists_killed: 1
+  pedestrians_injured: 1
+  pedestrians_killed: 1
+
+two:
+  location: 
+  latitude: 1.5
+  longitute: 1.5
+  street_name: MyString
+  date: 2017-09-10
+  borough: MyString
+  cyclists_injured: 1
+  cyclists_killed: 1
+  pedestrians_injured: 1
+  pedestrians_killed: 1
