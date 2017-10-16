@@ -37,7 +37,7 @@
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
       #map {
-        height: 100%;
+        height: 83%;
       }
       /* Optional: Makes the sample page fill the window. */
       html, body {
@@ -94,25 +94,23 @@
   <body id="page-top">
     <!-- from theme begin-->
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <nav class="navbar navbar-expand-lg navbar-light" id="mainNav" style="background-color: gainsboro;">
       <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="#page-top">SafeRout</a>
+        <!-- <a class="navbar-brand js-scroll-trigger" onClick="window.location.hash = '#home'">SAFERout</a> -->
+        <h1>SAFERout</h1>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#about">About</a>
+              <a class="nav-link js-scroll-trigger" onClick="window.location.hash = '#page-top'" style="color:black;">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#map">Start Mapping</a>
+              <a class="nav-link js-scroll-trigger" onClick="window.location.hash = '#about'" style="color:black;">About</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#portfolio">Portfolio</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
+              <a class="nav-link js-scroll-trigger" onClick="window.location.hash = '#map'" style="color:black;">Start Mapping</a>
             </li>
           </ul>
         </div>
@@ -120,34 +118,36 @@
     </nav>
 
     <header class="masthead">
-      <div class="header-content">
+      <div class="header-content" id="home">
         <div class="header-content-inner">
           <h1 id="homeHeading">Do You Bike NYC?</h1>
           <h1 id="homeHeading">Do You Walk NYC?</h1>
           <hr>
-          <p></p>
-          <a class="btn btn-primary btn-xl js-scroll-trigger" href="#map">Stay Safe</a>
+          <p>In the first half of 2017, 6,856 pedestrians and cyclists were injured by NYC drivers and 55 were killed. If you do a lot of walking or biking in NYC you can use SAFERout to plot your routes and locate the safest option for getting around town.</p>
+          <a class="btn btn-primary btn-xl js-scroll-trigger" style="color: white" onClick="window.location.hash = '#map'">Stay Safe</a>
         </div>
       </div>
     </header>
 
     <%= yield %>
     
-    <section class="bg-primary" id="about">
+    <section class="bg-primary" id="control_panel">
       <div class="container">
         <div class="row">
           <div class="col-lg-8 mx-auto text-center">
             <!-- <h2 class="section-heading text-white">We've got what you need!</h2> -->
             <!-- <hr class="light"> -->
-            <!-- <p class="text-faded">Start Bootstrap has everything you need to get your new website up and running in no time! All of the templates and themes on Start Bootstrap are open source, free to download, and easy to use. No strings attached!</p> -->
-            <a class="btn btn-default btn-xl js-scroll-trigger" onclick="getNumbers();">Get Data</a>
-            <a class="btn btn-default btn-xl js-scroll-trigger" onclick="clearMarkers(); safestRoute();" >Show Safest Route</a>
+            <p class="text-faded">Choose a travel mode then enter your origin and destination to visualize your route options. Choose Get Route Info to get the details</p>
+            <!-- <p class="text-faded">Enter your origin and destination to visualize your route options.</p> -->
+            <a class="btn btn-default btn-xl js-scroll-trigger" onclick="getCollisionCount(); distanceAndDuration(); window.location.hash = '#control_panel'">Get Route Info</a>
+            <a class="btn btn-default btn-xl js-scroll-trigger" onclick="clearMarkers(); safestRoute(); window.location.hash = '#map'" >Show Safest Route</a>
+            <a class="btn btn-default btn-xl js-scroll-trigger" href="#map" >Reset Map</a>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="services">
+    <section id="routes_info">
       <div class="container">
         <div class="row">
           <div class="col-lg-12 text-center">
@@ -162,24 +162,30 @@
             <div class="service-box">
               <!-- <i class="fa fa-4x fa-diamond text-primary sr-icons"></i> -->
               <h3>Route 1</h3>
-              <p class="text-muted">Number of Pedestrians and Cyclists Injured or Killed on This Route</p>
-              <p class="data"></p>
+              <p class="distance text-muted"></p>
+              <p class="duration text-muted"></p>
+              <p class="text-muted data_title"></p>
+              <p class="data" style="font-weight:700; color:firebrick;"></p>
             </div>
           </div>
           <div class="col-lg-4 col-md-6 text-center">
             <div class="service-box">
               <!-- <i class="fa fa-4x fa-paper-plane text-primary sr-icons"></i> -->
               <h3>Route 2</h3>
-              <p class="text-muted">Number of Pedestrians and Cyclists Injured or Killed on This Route</p>
-              <p class="data"></p>
+              <p class="distance text-muted"></p>
+              <p class="duration text-muted"></p>
+              <p class="text-muted data_title"></p>
+              <p class="data" style="font-weight:700; color:firebrick;"></p>
             </div>
           </div>
           <div class="col-lg-4 col-md-6 text-center">
             <div class="service-box">
               <!-- <i class="fa fa-4x fa-newspaper-o text-primary sr-icons"></i> -->
               <h3>Route 3</h3>
-              <p class="text-muted">Number of Pedestrians and Cyclists Injured or Killed on This Route</p>
-              <p class="data"></p>
+              <p class="distance text-muted"></p>
+              <p class="duration text-muted"></p>
+              <p class="text-muted data_title"></p>
+              <p class="data" style="font-weight:700; color:firebrick;"></p>
             </div>
           </div>
           <!-- <div class="col-lg-3 col-md-6 text-center">
@@ -291,36 +297,38 @@
       </div>
     </section> -->
 
-    <!-- <div class="call-to-action bg-dark">
+    <div class="call-to-action bg-dark">
       <div class="container text-center">
-        <h2>Free Download at Start Bootstrap!</h2>
-        <a class="btn btn-default btn-xl sr-button" href="http://startbootstrap.com/template-overviews/creative/">Download Now!</a>
+        <!-- <h2>Free Download at Start Bootstrap!</h2>
+        <a class="btn btn-default btn-xl sr-button" href="http://startbootstrap.com/template-overviews/creative/">Download Now!</a> -->
       </div>
-    </div> -->
+    </div>
     
-   <!--  <section id="contact">
+    <section id="about">
       <div class="container">
         <div class="row">
           <div class="col-lg-8 mx-auto text-center">
-            <h2 class="section-heading">Let's Get In Touch!</h2>
+            <h2 class="section-heading">About SAFERout</h2>
             <hr class="primary">
-            <p>Ready to start your next project with us? That's great! Give us a call or send us an email and we will get back to you as soon as possible!</p>
+            <p>SAFERout combines a number of GoogleMaps API services to give you your route options and pulls data from the NYPD Motor Vehicle Collisions API provided by NYC OpenDate to locate relevent collisions along your routes. SAFERout's assesment of route safety is based solely on comparing raw collision history data for each route. The NYPD Motor Vehicle Collisions API records all collisions in NYC beginning July 2012 </p>
+            <p>Check out the code or send feedback</p>
           </div>
         </div>
         <div class="row">
           <div class="col-lg-4 ml-auto text-center">
-            <i class="fa fa-phone fa-3x sr-contact"></i>
-            <p>123-456-6789</p>
+            <!-- <i class="fa fa-phone fa-3x sr-contact"></i> -->
+            <img src="github_icon.png">
+            <p><a href= "https://github.com/zekebergida/saferout" target="_blank">GitHub</a></p>
           </div>
           <div class="col-lg-4 mr-auto text-center">
             <i class="fa fa-envelope-o fa-3x sr-contact"></i>
             <p>
-              <a href="mailto:your-email@your-domain.com">feedback@startbootstrap.com</a>
+              <a href="mailto:zekebergida@gmail.com">zekebergida@gmail.com</a>
             </p>
           </div>
         </div>
       </div>
-    </section> -->
+    </section>
 
     <!-- Bootstrap core JavaScript -->
     <!-- <script src="/vendor/jquery/jquery.min.js"></script> -->

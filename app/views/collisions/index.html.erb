@@ -19,7 +19,6 @@
 </div>
 
 <div id="map"></div>
-<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
 <script>
 // This example requires the Places library. Include the libraries=places
 // parameter when you first load the API. For example:
@@ -125,15 +124,13 @@ AutocompleteDirectionsHandler.prototype.route = function() {
           directions: response,
           routeIndex: i
         });
-        // var routeLabel = new google.maps.InfoWindow({
-        //   content: "Rt." + (i + 1),
-        //   position: response.routes["" + i + ""].overview_path[response.routes["" + i + ""].overview_path.length / 2]
-        // });
-        // routeLabel.open(this.map);
+        console.log(response.routes["" + i + ""].overview_path[Math.floor(response.routes["" + i + ""].overview_path.length / 2)]);
+        console.log(Math.floor(response.routes["" + i + ""].overview_path.length / 2))
+        // console.log(response.routes["" + i + ""].overview_path);
+        // console.log(response.routes["" + i + ""].overview_path.length);
         var marker1 = new google.maps.Marker({
-          position: response.routes["" + i + ""].overview_path[response.routes["" + i + ""].overview_path.length / 2],
+          position: response.routes["" + i + ""].overview_path[Math.floor(response.routes["" + i + ""].overview_path.length / 2)],
           map: this.map,
-          // icon: imageFiles[i]
           label: "" + (i + 1) + ""
         });
         markers.push(marker1);
@@ -156,7 +153,7 @@ AutocompleteDirectionsHandler.prototype.route = function() {
                 );
                 markers.push(marker);
                 accidents[i] += 1;
-                console.log(accidents);                
+                // console.log(accidents);                
               }
             }.bind(this));
           }.bind(this))(i);  
@@ -192,25 +189,55 @@ function clearMarkers() {
 }
 function safestRoute() {
   var IndexMin = indexOfMin(accidents);
-  for (var a = 0; a < accidents.length; a++) {
+  for (var a = 0; a < routes.length; a++) {
     if (a !== IndexMin) { 
       routes[a].setMap(null);
     }
   }
 }
-function getNumbers() {
-  console.log(accidents);
-  var d = document.getElementsByClassName("data");
-  console.log(d);
-
-  for (var i = 0; i < d.length; i++) {
+function distanceAndDuration() {
+  // console.log(routes[0].directions.routes[0].legs[0].distance.text);
+  // console.log(routes[0].directions.routes[0].legs[0].duration.text);
+  var time = document.getElementsByClassName("duration");
+  var far = document.getElementsByClassName("distance");
+  for (var i = 0; i < time.length; i++) {
     if (i + 1 <= accidents.length) {
-      d[i].innerHTML = accidents[i];
-    } else {
-      d[i].innerHTML = "No Additional Routes";
+      time[i].innerHTML = 'Distance: <span style="font-weight:700; color:navy;">' + routes[0].directions.routes[i].legs[0].duration.text + "</span>";
+      far[i].innerHTML = 'Duration: <span style="font-weight:700; color:navy;">' + routes[0].directions.routes[i].legs[0].distance.text; + "</span>";
     }
   }
 }
+function getCollisionCount() {
+  // console.log(accidents);
+  var d = document.getElementsByClassName("data");
+  var dt = document.getElementsByClassName("data_title");
+  // console.log(d);
+
+  for (var i = 0; i < d.length; i++) {
+    if (i + 1 <= accidents.length) {
+      d[i].innerHTML = "" + accidents[i] + ""
+      dt[i].innerHTML = "Number of Pedestrians and Cyclists Injured or Killed on This Route";
+    } else {
+      dt[i].innerHTML = "No Additional Routes";
+    }
+  }
+}
+function resetMap() {
+  clearMarkers();
+  for (var a = 0; a < routes.length; a++) { 
+    routes[a].setMap(null);
+  }
+  markers = [];
+  routes = [];
+  accidents = [];
+  // document.getElementById('origin-input').value = null;
+  // document.getElementById('destination-input').value = null;
+}
+function scrollToRouteInfo() {
+  var objDiv = document.getElementById("routes_info");
+  objDiv.scrollTop = objDiv.scrollHeight;
+}
+
 </script>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['API_KEY'] %>&libraries=places&callback=initMap"
