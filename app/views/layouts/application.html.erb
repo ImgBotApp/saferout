@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Saferout</title>
-    <!-- from theme begin -->
+    <title>SAFERout</title>
+    <!-- from bootstrap theme begin -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -24,70 +24,14 @@
     <!-- Custom styles for this template -->
     <link href="/css/creative.css" rel="stylesheet">
 
-    <!-- from theme end-->
+    <!-- from bootstrap theme end-->
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     
-    <!-- trying map begin-->
-    <!-- <meta name="viewport" content="initial-scale=1.0">
-    <meta charset="utf-8"> -->
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 83%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-      .controls {
-        margin-top: 10px;
-        border: 1px solid transparent;
-        border-radius: 2px 0 0 2px;
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        height: 32px;
-        outline: none;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-      }
-
-      #origin-input,
-      #destination-input {
-        background-color: #fff;
-        font-family: Roboto;
-        font-size: 15px;
-        font-weight: 300;
-        margin-left: 12px;
-        padding: 0 11px 0 13px;
-        text-overflow: ellipsis;
-        width: 200px;
-      }
-
-      #origin-input:focus,
-      #destination-input:focus {
-        border-color: #4d90fe;
-      }
-
-      #mode-selector {
-        color: #fff;
-        background-color: #4d90fe;
-        margin-left: 12px;
-        padding: 5px 11px 0px 11px;
-      }
-
-      #mode-selector label {
-        font-family: Roboto;
-        font-size: 13px;
-        font-weight: 300;
-      }
-
-    </style>
-    <!-- trying map end-->
+    
+    
 
   </head>
 
@@ -137,11 +81,11 @@
           <div class="col-lg-8 mx-auto text-center">
             <!-- <h2 class="section-heading text-white">We've got what you need!</h2> -->
             <!-- <hr class="light"> -->
-            <p class="text-faded">Choose a travel mode then enter your origin and destination to visualize your route options. Choose Get Route Info to get the details</p>
+            <p class="text-faded">Choose a travel mode then enter your origin and destination to visualize your route options. Choose Get Route Info to get the details.</p>
             <!-- <p class="text-faded">Enter your origin and destination to visualize your route options.</p> -->
             <a class="btn btn-default btn-xl js-scroll-trigger" onclick="getCollisionCount(); distanceAndDuration(); window.location.hash = '#control_panel'">Get Route Info</a>
             <a class="btn btn-default btn-xl js-scroll-trigger" onclick="clearMarkers(); safestRoute(); window.location.hash = '#map'" >Show Safest Route</a>
-            <a class="btn btn-default btn-xl js-scroll-trigger" href="#map" >Reset Map</a>
+            <a class="btn btn-default btn-xl js-scroll-trigger" onclick="resetMap()" href="#map" >Reset Map</a>
           </div>
         </div>
       </div>
@@ -310,7 +254,7 @@
           <div class="col-lg-8 mx-auto text-center">
             <h2 class="section-heading">About SAFERout</h2>
             <hr class="primary">
-            <p>SAFERout combines a number of GoogleMaps API services to give you your route options and pulls data from the NYPD Motor Vehicle Collisions API provided by NYC OpenDate to locate relevent collisions along your routes. SAFERout's assesment of route safety is based solely on comparing raw collision history data for each route. The NYPD Motor Vehicle Collisions API records all collisions in NYC beginning July 2012 </p>
+            <p>SAFERout combines a number of GoogleMaps API services to give you your route options and pulls data from the NYPD Motor Vehicle Collisions API provided by NYC OpenData to locate relevent collisions along your routes. SAFERout's assesment of route safety is based solely on comparing raw collision history data for each route. The NYPD Motor Vehicle Collisions API records all collisions in NYC beginning July 2012 </p>
             <p>Check out the code or send feedback</p>
           </div>
         </div>
