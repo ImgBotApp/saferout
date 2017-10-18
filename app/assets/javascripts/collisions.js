@@ -79,7 +79,6 @@ AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function(aut
   });
 
 };
-// set arrays to be able to call functions later on the markers and routes, also to calculate the collisions
 var markers = [];
 var routes = [];
 var accidents = [];
@@ -97,7 +96,7 @@ AutocompleteDirectionsHandler.prototype.route = function() {
     provideRouteAlternatives: true,
   }, function(response, status) {
     if (status === 'OK') {
-      // firstLoop  to display all routes in the response   
+      // first loop  to display all routes in the response   
       for (var i = 0, len = response.routes.length; i < len; i++) {
         var route = new google.maps.DirectionsRenderer({
           map: this.map,
@@ -114,11 +113,12 @@ AutocompleteDirectionsHandler.prototype.route = function() {
         markers.push(marker1);
         routes.push(route);
         accidents.push(0);
-        // secondLoop to iterate over points on overview_path and locate relevant collisions near each point
+        // second loop to iterate over points on overview_path and locate relevant collisions near each point
         for (var n = 0; n < response.routes["" + i + ""].overview_path.length; n++) {
           (function(i) {
+            // this query for collision locations is inaccurate because points on the overview path are not at a set distance from each other. Therefor finding collisions within a set radius of each point will result in some duplicates and some ommisions
             $.get("https://data.cityofnewyork.us/resource/qiz3-axqb.geojson?$where=within_circle(location, " + response.routes["" + i + ""].overview_path["" + n + ""].lat() + ", " + response.routes["" + i + ""].overview_path["" + n + ""].lng() + ", 15) AND (number_of_pedestrians_injured > 0 OR number_of_pedestrians_killed > 0 OR number_of_cyclist_injured > 100 OR number_of_cyclist_killed > 0)").success(function(result) {
-              // thirdLoop to create a marker for each collision in the response
+              // third loop to create a marker for each collision in the response
               for (var f = 0; f < result.features.length; f++) {
                 var coords = result.features[f].geometry.coordinates;
                 var latLng = new google.maps.LatLng(coords[1],coords[0]);
@@ -203,6 +203,7 @@ function getCollisionCount() {
   }
 }
 function resetMap() {
+  // window.google = {};
   clearMarkers();
   for (var a = 0; a < routes.length; a++) { 
     routes[a].setMap(null);
@@ -210,7 +211,7 @@ function resetMap() {
   markers = [];
   routes = [];
   accidents = [];
-  console.log(hello)
   // document.getElementById('origin-input').value = null;
   // document.getElementById('destination-input').value = null;
 }
+// functions for control panel buttons end
