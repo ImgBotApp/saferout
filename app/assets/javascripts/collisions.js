@@ -79,6 +79,7 @@ AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function(aut
   });
 
 };
+var polylineColors = ["red", "blue", "green"];
 var markers = [];
 var routes = [];
 var accidents = [];
@@ -101,7 +102,10 @@ AutocompleteDirectionsHandler.prototype.route = function() {
         var route = new google.maps.DirectionsRenderer({
           map: this.map,
           directions: response,
-          routeIndex: i
+          routeIndex: i,
+          polylineOptions: {
+            strokeColor: polylineColors[i]
+          }
         });
         // create marker to label each route
         var middleIndexOverviewPath = Math.floor(response.routes["" + i + ""].overview_path.length / 2);
