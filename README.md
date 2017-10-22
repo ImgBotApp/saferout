@@ -1,4 +1,9 @@
 # README
+The javascript that makes this app run is located in app/assets/javascripts/collisions.js
+
+
+
+
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
