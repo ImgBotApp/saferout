@@ -30,7 +30,7 @@ function AutocompleteDirectionsHandler(map) {
   this.directionsDisplay = new google.maps.DirectionsRenderer({
     draggable: true,
   });
-  this.directionsDisplay.setMap(map);
+  // this.directionsDisplay.setMap(map);
 
   var originAutocomplete = new google.maps.places.Autocomplete(
     originInput, {placeIdOnly: true});
@@ -83,6 +83,7 @@ var polylineColors = ["red", "blue", "green"];
 var markers = [];
 var routes = [];
 var accidents = [];
+var directionsResponse;
 // getting directions
 AutocompleteDirectionsHandler.prototype.route = function() {
   if (!this.originPlaceId || !this.destinationPlaceId) {
@@ -97,6 +98,7 @@ AutocompleteDirectionsHandler.prototype.route = function() {
     provideRouteAlternatives: true,
   }, function(response, status) {
     if (status === 'OK') {
+      directionsResponse = response;
       // first loop  to display all routes in the response   
       for (var i = 0, len = response.routes.length; i < len; i++) {
         var route = new google.maps.DirectionsRenderer({
@@ -217,5 +219,16 @@ function resetMap() {
   accidents = [];
   // document.getElementById('origin-input').value = null;
   // document.getElementById('destination-input').value = null;
+}
+function directionsPanel() {
+  // var map = document.getElementById('map');
+  var panel = document.getElementById('directionsPanel');
+  // map.style = "margin-right: 400px;";
+  directionsResponse.routes = [directionsResponse.routes[0]];
+  var route = new google.maps.DirectionsRenderer({
+    directions: directionsResponse,
+  });
+  route.setPanel(document.getElementById('directionsPanel'));
+  panel.style = "float:right; width:390px; height:83%; padding-left: 10px;"
 }
 // functions for control panel buttons end

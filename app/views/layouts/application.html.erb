@@ -82,8 +82,8 @@
             <p class="text-faded">Choose a travel mode then enter your origin and destination to visualize your route options. Choose Get Route Info to get the details.</p>
             <!-- <p class="text-faded">Enter your origin and destination to visualize your route options.</p> -->
             <a class="btn btn-default btn-xl js-scroll-trigger" onclick="getCollisionCount(); distanceAndDuration(); window.location.hash = '#control_panel'">Get Route Info</a>
-            <a class="btn btn-default btn-xl js-scroll-trigger" onclick="clearMarkers(); safestRoute(); window.location.hash = '#map'" >Show Safest Route</a>
-            <a class="btn btn-default btn-xl js-scroll-trigger" onclick="resetMap()" href="#map" >Reset Map</a>
+            <a class="btn btn-default btn-xl js-scroll-trigger" onclick="clearMarkers(); directionsPanel(); safestRoute(); window.location.hash = '#map'" >Show Safest Route</a>
+            <a class="btn btn-default btn-xl js-scroll-trigger" onclick="resetMap();" href="#map" >Reset Map</a>
           </div>
         </div>
       </div>
@@ -285,6 +285,6 @@
     <!-- Custom scripts for this template -->
     <script src="/js/creative.min.js"></script>
     <!-- from theme end-->
-    
+    <!-- <div id="directionsPanel"></div> -->
   </body>
 </html>
