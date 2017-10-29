@@ -79,7 +79,7 @@ AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function(aut
   });
 
 };
-var polylineColors = ["red", "blue", "green"];
+var polylineColors = ["red", "blue", "yellow"];
 var markers = [];
 var routes = [];
 var accidents = [];
@@ -104,7 +104,9 @@ AutocompleteDirectionsHandler.prototype.route = function() {
           directions: response,
           routeIndex: i,
           polylineOptions: {
-            strokeColor: polylineColors[i]
+            strokeColor: polylineColors[i],
+            strokeOpacity: 0.5,
+            strokeWeight: 6
           }
         });
         // create marker to label each route
